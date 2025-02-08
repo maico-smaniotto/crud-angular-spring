@@ -7,14 +7,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CoursesService {
 
+  private readonly API = '/assets/courses.json';
+
   constructor(private httpClient: HttpClient) { }
 
-  list(): Course[] {
-    return [
-      { _id: '1', name: 'Angular', category: 'Frontend' },
-      { _id: '2', name: 'React', category: 'Frontend' },
-      { _id: '3', name: 'Java', category: 'Backend' },
-      { _id: '4', name: 'Spring', category: 'Backend' }
-    ];
+  list() {
+    return this.httpClient.get<Course[]>(this.API);
   }
 }
