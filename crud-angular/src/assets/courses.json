@@ -2,5 +2,21 @@
   { "_id": "1", "name": "Angular", "category": "Frontend" },
   { "_id": "2", "name": "React", "category": "Frontend" },
   { "_id": "3", "name": "Java", "category": "Backend" },
-  { "_id": "4", "name": "Spring", "category": "Backend" }
+  { "_id": "4", "name": "Spring", "category": "Backend" },
+  { "_id": "5", "name": "Node", "category": "Backend" },
+  { "_id": "6", "name": "MongoDB", "category": "Database" },
+  { "_id": "7", "name": "MySQL", "category": "Database" },
+  { "_id": "8", "name": "Python", "category": "Backend" },
+  { "_id": "9", "name": "Django", "category": "Backend" },
+  { "_id": "10", "name": "Ruby", "category": "Backend" },
+  { "_id": "11", "name": "Rails", "category": "Backend" },
+  { "_id": "12", "name": "Vue", "category": "Frontend" },
+  { "_id": "13", "name": "Svelte", "category": "Frontend" },
+  { "_id": "14", "name": "Ember", "category": "Frontend" },
+  { "_id": "15", "name": "Laravel", "category": "Backend" },
+  { "_id": "16", "name": "Express", "category": "Backend" },
+  { "_id": "17", "name": "PostgreSQL", "category": "Database" },
+  { "_id": "18", "name": "SQL Server", "category": "Database" },
+  { "_id": "19", "name": "C#", "category": "Backend" },
+  { "_id": "20", "name": "ASP.NET", "category": "Backend" }
 ]
