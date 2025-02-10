@@ -8,6 +8,7 @@ import { first, tap, delay } from 'rxjs';
 })
 export class CoursesService {
 
+  // para testar erro só estragar esta url
   private readonly API = '/assets/courses.json';
 
   constructor(private httpClient: HttpClient) { }
@@ -17,7 +18,7 @@ export class CoursesService {
     .pipe(
       //take(1),
       first(), // pega só primeiro valor e cancela a inscrição
-      delay(2000),
+      delay(2000), // delay apenas para testar carregamento
       tap((courses: Course[]) => console.log(courses))
     );
   }

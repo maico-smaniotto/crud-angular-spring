@@ -3,7 +3,9 @@ import { Course } from '../model/course';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from '../../shared/app-material/app-material.module';
 import { CoursesService } from '../services/courses.service';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-courses',
@@ -16,13 +18,29 @@ export class CoursesComponent implements OnInit {
 
   displayedColumns = ['name', 'category'];
 
-  constructor(private coursesService: CoursesService) {
+  constructor(
+    private coursesService: CoursesService,
+    private dialog: MatDialog
+  ) {
     // retorna um observable
-    this.courses$ = this.coursesService.list();
+    this.courses$ = this.coursesService.list()
+      .pipe(
+        catchError(err => {
+          console.log(err.message);
+          this.onError('Erro ao carregar cursos.');
+          return of([]);
+        })
+      );
 
     // se quisesse converter para array (neste caso this.courses$ seria um array de Course)
     // porém não é necessário pois o angular já faz isso (dataSource da mat-table aceita um observable)
     // this.courses = this.coursesService.list().subscribe(courses => {this.courses$ = courses});
+  }
+
+  onError(errorMsg: string) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: errorMsg
+    });
   }
 
   ngOnInit() {
