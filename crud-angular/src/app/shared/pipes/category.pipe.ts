@@ -7,8 +7,8 @@ export class CategoryPipe implements PipeTransform {
 
   transform(value: string, ...args: unknown[]): string {
     switch(value) {
-      case 'Frontend': return 'computer';
-      case 'Backend': return 'code';
+      case 'Front-end': return 'computer';
+      case 'Back-end': return 'code';
       case 'Database': return 'folder';
     }
     return 'code';
