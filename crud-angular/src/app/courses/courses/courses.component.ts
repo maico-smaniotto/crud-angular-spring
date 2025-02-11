@@ -7,6 +7,7 @@ import { CoursesService } from '../services/courses.service';
 import { catchError, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-courses',
@@ -20,8 +21,10 @@ export class CoursesComponent implements OnInit {
   displayedColumns = ['_id', 'name', 'category', 'actions'];
 
   constructor(
-    private coursesService: CoursesService,
-    private dialog: MatDialog
+    private readonly coursesService: CoursesService,
+    private readonly dialog: MatDialog,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {
     // retorna um observable
     this.courses$ = this.coursesService.list()
@@ -49,5 +52,10 @@ export class CoursesComponent implements OnInit {
     // porém no modo strict do angular (definido em tsconfig.json)
     // obriga que tudo seja inicializado por isso é necessário no construtor
     // this.courses = this.coursesService.list();
+  }
+
+  onAdd() {
+    // console.log('Adicionar curso');
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 }
