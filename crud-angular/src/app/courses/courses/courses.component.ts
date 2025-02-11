@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Course } from '../model/course';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from '../../shared/app-material/app-material.module';
+import { SharedModule } from '../../shared/shared.module';
 import { CoursesService } from '../services/courses.service';
 import { catchError, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +10,7 @@ import { ErrorDialogComponent } from '../../shared/components/error-dialog/error
 
 @Component({
   selector: 'app-courses',
-  imports: [CommonModule, AppMaterialModule],
+  imports: [CommonModule, AppMaterialModule, SharedModule],
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss'
 })
