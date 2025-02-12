@@ -8,6 +8,10 @@ mat-card {
   // text-align: center;
 }
 
+mat-card-title {
+  margin-bottom: 0.7em;
+}
+
 .min-width {
   width: 100%;
   min-width: 150px;
@@ -17,4 +21,8 @@ mat-card-actions {
   display: flex;
   justify-content: flex-end;
   margin-right: 0.5em;
+}
+
+mat-card-actions button {
+  margin: 5px;
 }
