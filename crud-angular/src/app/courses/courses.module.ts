@@ -4,6 +4,7 @@ import { CoursesRoutingModule } from './courses-routing.module';
 import { AppMaterialModule } from '../shared/app-material/app-material.module';
 import { CoursesComponent } from './courses/courses.component';
 import { SharedModule } from '../shared/shared.module';
+import { CourseFormComponent } from './course-form/course-form.component';
 
 @NgModule({
   declarations: [],
@@ -12,7 +13,8 @@ import { SharedModule } from '../shared/shared.module';
     CoursesRoutingModule,
     AppMaterialModule,
     SharedModule,
-    CoursesComponent
+    CoursesComponent,
+    CourseFormComponent,
   ],
   exports: [CoursesComponent]
 })
