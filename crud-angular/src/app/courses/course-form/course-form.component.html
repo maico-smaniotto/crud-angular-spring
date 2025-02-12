@@ -14,7 +14,16 @@
 
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Categoria</mat-label>
-        <input matInput placeholder="Categoria" formControlName="category">
+        <!-- <input matInput placeholder="Categoria" formControlName="category"> -->
+        <mat-select formControlName="category" required>
+          <mat-option value="null"></mat-option>
+          <mat-option value="Front-end">Front-end</mat-option>
+          <mat-option value="Back-end">Back-end</mat-option>
+          <mat-option value="Database">Database</mat-option>
+        </mat-select>
+        <!-- @if (category.hasError('required')) {
+          <mat-error>Please choose an animal</mat-error>
+        } -->
       </mat-form-field>
     </form>
   </mat-card-content>
