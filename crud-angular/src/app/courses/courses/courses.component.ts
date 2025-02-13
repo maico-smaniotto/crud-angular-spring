@@ -8,17 +8,16 @@ import { catchError, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesListComponent } from '../courses-list/courses-list.component';
 
 @Component({
   selector: 'app-courses',
-  imports: [CommonModule, AppMaterialModule, SharedModule],
+  imports: [CommonModule, AppMaterialModule, SharedModule, CoursesListComponent],
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss'
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]>;
-
-  displayedColumns = ['_id', 'name', 'category', 'actions'];
 
   constructor(
     private readonly coursesService: CoursesService,
