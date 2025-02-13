@@ -55,7 +55,7 @@ export class CoursesComponent implements OnInit {
   }
 
   onAdd() {
-    // console.log('Adicionar curso');
     this.router.navigate(['new'], { relativeTo: this.route });
   }
+
 }

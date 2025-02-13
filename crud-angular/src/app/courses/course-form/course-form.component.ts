@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { AppMaterialModule } from '../../shared/app-material/app-material.module';
 import { SharedModule } from '../../shared/shared.module';
-import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesService } from '../services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,8 +21,7 @@ export class CourseFormComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly service: CoursesService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly location: Location,
     private readonly dialog: MatDialog,
     private readonly _snackBar: MatSnackBar
   ) {
@@ -47,13 +45,13 @@ export class CourseFormComponent {
   }
 
   onCancel() {
-    this.router.navigate([''], { relativeTo: this.route });
+    this.location.back();
   }
 
   private onSuccess(result: any) {
     console.log('Curso salvo com sucesso', result);
-    this._snackBar.open('Curso salvo com sucesso', '', { duration: 5000 });
-    this.router.navigate([''], { relativeTo: this.route });
+    this._snackBar.open('Curso salvo com sucesso', '', { duration: 3000 });
+    this.location.back();
   }
 
   private onError(error: any) {
