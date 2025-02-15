@@ -10,6 +10,7 @@ import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +54,15 @@ public class CourseController {
                 found.setCategory(obj.getCategory());
                 Course updated = courseRepository.save(found);
                 return ResponseEntity.ok().body(updated);
+            }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return courseRepository.findById(id)
+            .map(found -> {
+                courseRepository.delete(found);
+                return ResponseEntity.noContent().<Void>build();
             }).orElse(ResponseEntity.notFound().build());
     }
 }
