@@ -9,6 +9,11 @@ import {
   MatDialogTitle
 } from '@angular/material/dialog';
 
+export interface ConfirmDialogData {
+  title: string;
+  message: string;
+}
+
 @Component({
   selector: 'app-confirm-dialog',
   imports: [
@@ -23,10 +28,8 @@ import {
 })
 export class ConfirmDialogComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  readonly dialogRef = inject(MatDialogRef<ConfirmDialogComponent>);
+  readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
 
   onConfirm(): void {
     this.dialogRef.close(true);

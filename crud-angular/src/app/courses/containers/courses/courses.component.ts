@@ -68,12 +68,14 @@ refresh() {
   }
 
   onRemove(obj: Course) {
-    this.dialog.open(ConfirmDialogComponent, {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Remover curso',
         message: `Deseja remover o curso ${obj.name}?`
       }
-    }).afterClosed().subscribe(result => {
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.coursesService.delete(obj._id)
         .subscribe(() => {
