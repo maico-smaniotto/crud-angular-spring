@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { NonNullableFormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
-import { AppMaterialModule } from '../../shared/app-material/app-material.module';
-import { SharedModule } from '../../shared/shared.module';
-import { CoursesService } from '../services/courses.service';
+import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
+import { SharedModule } from '../../../shared/shared.module';
+import { CoursesService } from '../../services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
+import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 
 interface CourseForm {
   name: FormControl<string>;
