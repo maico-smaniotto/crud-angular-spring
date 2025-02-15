@@ -10,6 +10,7 @@ import { ErrorDialogComponent } from '../../../shared/components/error-dialog/er
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-courses',
@@ -67,21 +68,31 @@ refresh() {
   }
 
   onRemove(obj: Course) {
-    this.coursesService.delete(obj._id)
-      .subscribe(() => {
-        this.refresh();
-        this._snackBar.open(
-          'Curso removido',
-          '',
-          {
-            duration: 3000,
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          }
-        );
-      },
-      err => {
-        this.onError('Erro ao remover curso.');
-      });
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Remover curso',
+        message: `Deseja remover o curso ${obj.name}?`
+      }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.coursesService.delete(obj._id)
+        .subscribe(() => {
+          this.refresh();
+          this._snackBar.open(
+            'Curso removido',
+            '',
+            {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            }
+          );
+        },
+        err => {
+          this.onError('Erro ao remover curso.');
+        });
+      }
+    });
+
   }
 }
