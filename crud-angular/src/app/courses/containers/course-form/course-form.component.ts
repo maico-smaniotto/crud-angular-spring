@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { NonNullableFormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { SharedModule } from '../../../shared/shared.module';
@@ -26,6 +26,8 @@ export class CourseFormComponent implements OnInit {
 
   form: FormGroup<CourseForm>;
 
+  private readonly NAME_MAX_LENGTH = 100;
+
   constructor(
     private readonly formBuilder: NonNullableFormBuilder,
     private readonly service: CoursesService,
@@ -36,8 +38,8 @@ export class CourseFormComponent implements OnInit {
   ) {
     this.form = this.formBuilder.group({
       _id: [''],
-      name: [''],
-      category: ['']
+      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(this.NAME_MAX_LENGTH)]],
+      category: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]]
     });
   }
 
@@ -71,6 +73,30 @@ export class CourseFormComponent implements OnInit {
     this.dialog.open(ErrorDialogComponent, {
       data: 'Erro ao salvar curso'
     });
+  }
+
+  getErrorMessage(fieldName: string) {
+    const field = this.form.get(fieldName);
+
+    if (field?.hasError('required')) {
+      return 'Campo obrigatório';
+    }
+    if (field?.hasError('minlength')) {
+      const minLength = field.errors ? field?.errors['minlength']['requiredLength'] : 0;
+      return `Campo deve ter no mínimo ${minLength} caracteres`;
+    }
+    if (field?.hasError('maxlength')) {
+      const maxLength = field.errors ? field?.errors['maxlength']['requiredLength'] : 0;
+      return `Campo pode ter no máximo ${maxLength} caracteres`;
+    }
+    return 'Campo inválido';
+  }
+
+  getMaxLength(fieldName: string): number {
+    if (fieldName === 'name') {
+      return this.NAME_MAX_LENGTH;
+    }
+    return 0;
   }
 
   ngOnInit() {
