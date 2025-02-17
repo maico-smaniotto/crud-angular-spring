@@ -1,5 +1,9 @@
 package com.maicosmaniotto.crud_spring.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.SQLSelect;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -16,6 +20,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "cursos")
+@SQLDelete(sql = "update cursos set status = 'X' where id = ?")
+@SQLRestriction("status <> 'X'")
 public class Course {
     
     @Id
@@ -34,4 +40,9 @@ public class Course {
     @Column(name = "categoria", length = 30, nullable = false)
     private String category;
 
+    @NotBlank(message = "Status is required")
+    @Size(min = 1, max = 1, message = "Status must have 1 character")
+    @Pattern(regexp = "[AIX]", message = "Status must be one of A (Ativo), I (Inativo) or X (Excluído)")
+    @Column(name = "status", length = 1, nullable = false)
+    private String status = "A";
 }
