@@ -2,7 +2,6 @@ package com.maicosmaniotto.crud_spring.model;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.SQLSelect;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
