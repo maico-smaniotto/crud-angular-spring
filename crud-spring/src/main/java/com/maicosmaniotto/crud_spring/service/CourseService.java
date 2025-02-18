@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import com.maicosmaniotto.crud_spring.dto.CourseDTO;
+import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
-import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
 import jakarta.validation.Valid;
@@ -16,29 +18,35 @@ import jakarta.validation.constraints.Positive;
 @Service
 public class CourseService {
     private final CourseRepository repository;
+    private final CourseMapper mapper;
 
-    public CourseService(CourseRepository repository) {
+    public CourseService(CourseRepository repository, CourseMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public List<Course> list() {
-        return repository.findAll();
+    public List<CourseDTO> list() {
+        return repository.findAll()
+            .stream()
+            .map(mapper::toDTO)
+            .toList();
     }
 
-    public Course findById(@NotNull @Positive Long id) {
-        return repository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
+    public CourseDTO findById(@NotNull @Positive Long id) {
+        return repository.findById(id).map(mapper::toDTO)
+            .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public Course create(@Valid Course obj) {
-        return repository.save(obj);
+    public CourseDTO create(@Valid @NotNull CourseDTO obj) {
+        return mapper.toDTO(repository.save(mapper.toEntity(obj)));
     }
 
-    public Course update(@NotNull @Positive Long id, @Valid Course obj) {
+    public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO obj) {
         return repository.findById(id)
             .map(found -> {
-                found.setName(obj.getName());
-                found.setCategory(obj.getCategory());
-                return repository.save(found);
+                found.setName(obj.name());
+                found.setCategory(obj.category());
+                return mapper.toDTO(repository.save(found));
             }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 

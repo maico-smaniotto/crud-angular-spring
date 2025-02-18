@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.maicosmaniotto.crud_spring.model.Course;
+import com.maicosmaniotto.crud_spring.dto.CourseDTO;
 import com.maicosmaniotto.crud_spring.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -34,23 +34,23 @@ public class CourseController {
 	}
 
 	@GetMapping
-    public List<Course> list() {
+    public List<CourseDTO> list() {
         return service.list();
     }
 
     @GetMapping("/{id}")
-    public Course findById(@PathVariable @NotNull @Positive Long id) {
+    public CourseDTO findById(@PathVariable @NotNull @Positive Long id) {
         return service.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course create(@RequestBody @Valid Course obj) {
+    public CourseDTO create(@RequestBody @Valid @NotNull CourseDTO obj) {
         return service.create(obj);
     }
 
     @PutMapping("/{id}")
-    public Course update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course obj) {
+    public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO obj) {
         return service.update(id, obj);
     }
 
