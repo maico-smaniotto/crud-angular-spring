@@ -49,7 +49,7 @@ public class CourseService {
                 found.setName(obj.name());
                 found.setCategory(CategoryConverter.stringToEntityAttribute(obj.category()));
 
-                if (obj.status() != null && !obj.status().isEmpty()) {
+                if (obj.status() != null) {
                     found.setStatus(RecordStatusConverter.stringToEntityAttribute(obj.status()));
                 }
                 return mapper.toDTO(repository.save(found));
