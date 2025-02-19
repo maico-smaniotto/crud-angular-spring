@@ -15,7 +15,9 @@ public record CourseDTO(
     String name, 
 
     @NotBlank(message = "Category is required")
-    @Size(min = 1, max = 30, message = "Category can be at most 30 characters")
     @Pattern(regexp = "Front-end|Back-end|Database", message = "Category must be one of Front-end, Back-end or Database")
-    String category
+    String category,
+
+    @Pattern(regexp = "Active|Inactive", message = "Status must be one of Active, Inactive")
+    String status
 ) { }

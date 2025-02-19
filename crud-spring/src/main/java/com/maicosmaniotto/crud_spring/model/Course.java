@@ -4,15 +4,20 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.maicosmaniotto.crud_spring.enums.Category;
+import com.maicosmaniotto.crud_spring.enums.RecordStatus;
+import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
+import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -28,20 +33,18 @@ public class Course {
     @JsonProperty("_id")
     private Long id;
 
-    @NotBlank(message = "Name is required")
-    @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
+    @NotBlank
+    @Size(min = 1, max = 100)
     @Column(name = "nome", length = 100, nullable = false)
     private String name;
     
-    @NotBlank(message = "Category is required")
-    @Size(min = 1, max = 30, message = "Category can be at most 30 characters")
-    @Pattern(regexp = "Front-end|Back-end|Database", message = "Category must be one of Front-end, Back-end or Database")
-    @Column(name = "categoria", length = 30, nullable = false)
-    private String category;
+    @NotNull
+    @Convert(converter = CategoryConverter.class)
+    @Column(name = "categoria", nullable = false)
+    private Category category;
 
-    @NotBlank(message = "Status is required")
-    @Size(min = 1, max = 1, message = "Status must have 1 character")
-    @Pattern(regexp = "[AIX]", message = "Status must be one of A (Ativo), I (Inativo) or X (Excluído)")
+    @NotNull
+    @Convert(converter = RecordStatusConverter.class)
     @Column(name = "status", length = 1, nullable = false)
-    private String status = "A";
+    private RecordStatus status = RecordStatus.ACTIVE;
 }

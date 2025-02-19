@@ -7,6 +7,8 @@ import org.springframework.validation.annotation.Validated;
 
 import com.maicosmaniotto.crud_spring.dto.CourseDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
+import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
+import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
@@ -45,7 +47,11 @@ public class CourseService {
         return repository.findById(id)
             .map(found -> {
                 found.setName(obj.name());
-                found.setCategory(obj.category());
+                found.setCategory(CategoryConverter.stringToEntityAttribute(obj.category()));
+
+                if (obj.status() != null && !obj.status().isEmpty()) {
+                    found.setStatus(RecordStatusConverter.stringToEntityAttribute(obj.status()));
+                }
                 return mapper.toDTO(repository.save(found));
             }).orElseThrow(() -> new RecordNotFoundException(id));
     }
