@@ -1,6 +1,6 @@
 package com.maicosmaniotto.crud_spring.dto.mapper;
 
-                                                                                                                                                                                                                                            import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;
 
 import com.maicosmaniotto.crud_spring.dto.CourseDTO;
 import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;

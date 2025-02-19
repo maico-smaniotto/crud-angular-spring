@@ -1,5 +1,8 @@
 package com.maicosmaniotto.crud_spring.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -9,12 +12,14 @@ import com.maicosmaniotto.crud_spring.enums.RecordStatus;
 import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
 import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -47,4 +52,8 @@ public class Course {
     @Convert(converter = RecordStatusConverter.class)
     @Column(name = "status", length = 1, nullable = false)
     private RecordStatus status = RecordStatus.ACTIVE;
+
+    // mappedBy = nome da própria entidade (classe) com letra minúscula (o nome que teria a tabela caso não fosse definido com @Table)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
+    private List<Lesson> lessons = new ArrayList<>();
 }

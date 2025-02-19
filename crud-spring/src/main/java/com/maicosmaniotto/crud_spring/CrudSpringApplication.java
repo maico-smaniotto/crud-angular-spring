@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.maicosmaniotto.crud_spring.enums.Category;
 import com.maicosmaniotto.crud_spring.model.Course;
+import com.maicosmaniotto.crud_spring.model.Lesson;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
 @SpringBootApplication
@@ -22,12 +23,20 @@ public class CrudSpringApplication {
 			repository.deleteAll();
 			
 			Course c;
+			Lesson l;
 
 			c = new Course();
 			c.setName("Angular");
 			c.setCategory(Category.FRONTENT);
-			repository.save(c);
 
+			l = new Lesson();
+			l.setTitle("CRUD Angular + Spring | 46: Curso-Aulas: Listando Aulas");
+			l.setVideoCode("Nb4uxLxdvxo");
+			l.setCourse(c);
+			c.getLessons().add(l);
+
+			repository.save(c);
+						
 			c = new Course();
 			c.setName("React");
 			c.setCategory(Category.FRONTENT);
