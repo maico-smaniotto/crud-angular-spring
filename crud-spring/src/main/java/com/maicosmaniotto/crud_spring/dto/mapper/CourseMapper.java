@@ -14,7 +14,13 @@ public class CourseMapper {
         if (entity == null) {
             return null;
         }
-        return new CourseDTO(entity.getId(), entity.getName(), entity.getCategory().toString(), entity.getStatus().toString());
+        return new CourseDTO(
+            entity.getId(), 
+            entity.getName(), 
+            entity.getCategory().toString(), 
+            entity.getStatus().toString(), 
+            entity.getLessons()
+        );
     }
 
     public Course toEntity(CourseDTO dto) {
