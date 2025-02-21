@@ -3,7 +3,6 @@ package com.maicosmaniotto.crud_spring.dto;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.maicosmaniotto.crud_spring.model.Lesson;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,5 +23,5 @@ public record CourseDTO(
     @Pattern(regexp = "Active|Inactive", message = "Status must be one of Active, Inactive")
     String status,
 
-    List<Lesson> lessons
+    List<LessonDTO> lessons
 ) { }

@@ -35,6 +35,12 @@ public class CrudSpringApplication {
 			l.setCourse(c);
 			c.getLessons().add(l);
 
+			l = new Lesson();
+			l.setTitle("CRUD Angular + Spring | 50: Curso-Aulas: FormArray HTML");
+			l.setVideoCode("Oslquz5_UNY");
+			l.setCourse(c);
+			c.getLessons().add(l);
+
 			repository.save(c);
 						
 			c = new Course();

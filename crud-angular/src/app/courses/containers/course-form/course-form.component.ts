@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { NonNullableFormBuilder, FormGroup, Validators, UntypedFormArray } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { SharedModule } from '../../../shared/shared.module';
@@ -9,12 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../model/course';
-
-interface CourseForm {
-  _id: FormControl<string>;
-  name: FormControl<string>;
-  category: FormControl<string>;
-}
+import { Lesson } from '../../model/lesson';
 
 @Component({
   selector: 'app-course-form',
@@ -24,7 +19,7 @@ interface CourseForm {
 })
 export class CourseFormComponent implements OnInit {
 
-  form: FormGroup<CourseForm>;
+  form!: FormGroup;
 
   private readonly NAME_MAX_LENGTH = 100;
 
@@ -35,13 +30,7 @@ export class CourseFormComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog,
     private readonly _snackBar: MatSnackBar
-  ) {
-    this.form = this.formBuilder.group({
-      _id: [''],
-      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(this.NAME_MAX_LENGTH)]],
-      category: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]]
-    });
-  }
+  ) { }
 
   onSubmit() {
     if (this.form.valid) {
@@ -75,8 +64,8 @@ export class CourseFormComponent implements OnInit {
     });
   }
 
-  getErrorMessage(fieldName: string) {
-    const field = this.form.get(fieldName);
+  getErrorMessage(form: FormGroup, fieldName: string) {
+    const field = form.get(fieldName);
 
     if (field?.hasError('required')) {
       return 'Campo obrigatório';
@@ -99,12 +88,49 @@ export class CourseFormComponent implements OnInit {
     return 0;
   }
 
+  getLessonsFormArray() {
+    return (<UntypedFormArray>this.form.get('lessons')).controls;
+  }
+
+  isFormArrayRequired() {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    return !lessons.valid && lessons.hasError('required') && lessons.touched;
+  }
+
   ngOnInit() {
     const course: Course = this.route.snapshot.data['course'];
-    this.form.setValue({
-      _id: course._id,
-      name: course.name,
-      category: course.category
+
+    this.form = this.formBuilder.group({
+      _id: [course._id],
+      name: [course.name, [Validators.required, Validators.minLength(1), Validators.maxLength(this.NAME_MAX_LENGTH)]],
+      category: [course.category, [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
+      lessons: this.formBuilder.array(this.retrieveLessons(course), Validators.required)
+    });
+  }
+
+  private retrieveLessons(course: Course) {
+    const lessons = [];
+    if (course?.lessons) {
+      course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
+    } else {
+      lessons.push(this.createLesson());
+    }
+    return lessons;
+  }
+
+  private createLesson(lesson: Lesson = {id: '', title: '', videoCode: ''}) {
+    return this.formBuilder.group({
+      id: [lesson.id],
+      title: [lesson.title, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(100)
+      ]],
+      videoCode: [lesson.videoCode, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(20)
+      ]]
     });
   }
 }
