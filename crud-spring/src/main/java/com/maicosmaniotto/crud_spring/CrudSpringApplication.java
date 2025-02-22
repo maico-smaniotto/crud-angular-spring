@@ -39,18 +39,32 @@ public class CrudSpringApplication {
 			l.setTitle("CRUD Angular + Spring | 50: Curso-Aulas: FormArray HTML");
 			l.setVideoCode("Oslquz5_UNY");
 			l.setCourse(c);
-			c.getLessons().add(l);
 
+			c.getLessons().add(l);
 			repository.save(c);
 						
 			c = new Course();
 			c.setName("React");
 			c.setCategory(Category.FRONTENT);
+
+			l = new Lesson();
+			l.setTitle("React | 01: Introdução");
+			l.setVideoCode("Oslquz5_UNY");
+			l.setCourse(c);
+
+			c.getLessons().add(l);			
 			repository.save(c);
 			
 			c = new Course();
 			c.setName("Java");
 			c.setCategory(Category.BACKEND);
+
+			l = new Lesson();
+			l.setTitle("Spring | 01: Introdução ao Spring");
+			l.setVideoCode("Oslquz5_UNY");
+			l.setCourse(c);
+
+			c.getLessons().add(l);
 			repository.save(c);
 
 			System.out.println("Database initialized");

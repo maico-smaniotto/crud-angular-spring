@@ -21,6 +21,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -60,6 +61,7 @@ public class Course {
     @Setter(AccessLevel.NONE)
     @NotNull
     @NotEmpty
+    @Valid
     // mappedBy = nome da própria entidade (classe) com letra minúscula (o nome que teria a tabela caso não fosse definido com @Table)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
     private List<Lesson> lessons = new ArrayList<>();
