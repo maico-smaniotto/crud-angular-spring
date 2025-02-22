@@ -11,7 +11,7 @@
         <mat-label>Nome</mat-label>
         <input matInput placeholder="Nome" formControlName="name" #name />
         <mat-hint align="end">{{ name.value.length || 0 }} / {{ getMaxLength('name') }}</mat-hint>
-        <mat-error *ngIf="form.get('name')?.invalid">{{ getErrorMessage(form, 'name') }}</mat-error>
+        <mat-error *ngIf="form.get('name')?.invalid">{{ formUtils.getErrorMessageFromFormGroupField(form, 'name') }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="full-width">
@@ -23,17 +23,17 @@
           <mat-option value="Back-end">Back-end</mat-option>
           <mat-option value="Database">Database</mat-option>
         </mat-select>
-        <mat-error *ngIf="form.get('category')?.invalid">{{ getErrorMessage(form, 'category') }}</mat-error>
+        <mat-error *ngIf="form.get('category')?.invalid">{{ formUtils.getErrorMessageFromFormGroupField(form, 'category') }}</mat-error>
       </mat-form-field>
 
       <mat-toolbar>
         <span>Aulas</span>
-        <button mat-icon-button color="accent">
+        <button mat-icon-button color="accent" (click)="onAddNewLessonClick()">
           <mat-icon aria-label="Adicionar uma nova aula">add</mat-icon>
         </button>
       </mat-toolbar>
 
-      <mat-error *ngIf="isFormArrayRequired()" class="form-array-error">
+      <mat-error *ngIf="formUtils.isFormArrayRequired(form, 'lessons')" class="form-array-error">
         Adicione pelo menos uma aula
       </mat-error>
 
@@ -46,7 +46,7 @@
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Título</mat-label>
               <input matInput formControlName="title" #title />
-              <mat-error *ngIf="getLessonsFormArray()[i].get('title')?.invalid">{{ getErrorMessage(form, 'title') }}</mat-error>
+              <mat-error *ngIf="getLessonsFormArray()[i].get('title')?.invalid">{{ formUtils.getErrorMessageFromFormArrayField(form, 'lessons', i, 'title') }}</mat-error>
             </mat-form-field>
           </td>
           <td style="width: 30%;">
@@ -54,8 +54,13 @@
               <mat-label>Código do vídeo</mat-label>
               <span matPrefix>https://youtu.be/</span>
               <input matInput formControlName="videoCode" #videoCode />
-              <mat-error *ngIf="getLessonsFormArray()[i].get('videoCode')?.invalid">{{ getErrorMessage(form, 'videoCode') }}</mat-error>
+              <mat-error *ngIf="getLessonsFormArray()[i].get('videoCode')?.invalid">{{ formUtils.getErrorMessageFromFormArrayField(form, 'lessons', i, 'videoCode') }}</mat-error>
             </mat-form-field>
+          </td>
+          <td>
+            <button mat-icon-button color="warning" (click)="onDeleteLessonClick(i)">
+              <mat-icon aria-label="Remover aula">delete</mat-icon>
+            </button>
           </td>
         </tr>
       </table>

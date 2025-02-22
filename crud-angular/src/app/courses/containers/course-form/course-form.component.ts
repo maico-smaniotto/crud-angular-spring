@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, FormGroup, Validators, UntypedFormArray } from '@angular/forms';
+import { NonNullableFormBuilder, FormGroup, Validators, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { SharedModule } from '../../../shared/shared.module';
@@ -10,6 +10,7 @@ import { ErrorDialogComponent } from '../../../shared/components/error-dialog/er
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
+import { FormUtilsService } from '../../../shared/form/form-utils.service';
 
 @Component({
   selector: 'app-course-form',
@@ -29,7 +30,8 @@ export class CourseFormComponent implements OnInit {
     private readonly location: Location,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog,
-    private readonly _snackBar: MatSnackBar
+    private readonly _snackBar: MatSnackBar,
+    public formUtils: FormUtilsService
   ) { }
 
   onSubmit() {
@@ -44,11 +46,23 @@ export class CourseFormComponent implements OnInit {
           this.onError(error);
         }
       });
+    } else {
+      this.formUtils.validateFormFields(this.form);
     }
   }
 
   onCancel() {
     this.location.back();
+  }
+
+  onAddNewLessonClick() {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.push(this.createLesson());
+  }
+
+  onDeleteLessonClick(index: number) {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.removeAt(index);
   }
 
   private onSuccess(result: any) {
@@ -64,23 +78,6 @@ export class CourseFormComponent implements OnInit {
     });
   }
 
-  getErrorMessage(form: FormGroup, fieldName: string) {
-    const field = form.get(fieldName);
-
-    if (field?.hasError('required')) {
-      return 'Campo obrigatório';
-    }
-    if (field?.hasError('minlength')) {
-      const minLength = field.errors ? field?.errors['minlength']['requiredLength'] : 0;
-      return `Campo deve ter no mínimo ${minLength} caracteres`;
-    }
-    if (field?.hasError('maxlength')) {
-      const maxLength = field.errors ? field?.errors['maxlength']['requiredLength'] : 0;
-      return `Campo pode ter no máximo ${maxLength} caracteres`;
-    }
-    return 'Campo inválido';
-  }
-
   getMaxLength(fieldName: string): number {
     if (fieldName === 'name') {
       return this.NAME_MAX_LENGTH;
@@ -90,11 +87,6 @@ export class CourseFormComponent implements OnInit {
 
   getLessonsFormArray() {
     return (<UntypedFormArray>this.form.get('lessons')).controls;
-  }
-
-  isFormArrayRequired() {
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    return !lessons.valid && lessons.hasError('required') && lessons.touched;
   }
 
   ngOnInit() {
