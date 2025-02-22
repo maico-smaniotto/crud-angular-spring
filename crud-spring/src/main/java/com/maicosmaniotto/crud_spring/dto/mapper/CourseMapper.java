@@ -51,15 +51,16 @@ public class CourseMapper {
             course.setStatus(RecordStatusConverter.stringToEntityAttribute(courseDTO.status()));
         }
 
-        List<Lesson> lessons = courseDTO.lessons().stream().map(lessonDTO -> {
+        course.getLessons().clear();
+        courseDTO.lessons().stream().forEach(lessonDTO -> {
             var lesson = new Lesson();
             lesson.setId(lessonDTO.id());
             lesson.setTitle(lessonDTO.title());
             lesson.setVideoCode(lessonDTO.videoCode());
             lesson.setCourse(course);
-            return lesson;
-        }).toList();
-        course.setLessons(lessons);
+
+            course.getLessons().add(lesson);
+        });
         
         return course;
     }

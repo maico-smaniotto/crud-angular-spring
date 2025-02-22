@@ -22,9 +22,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 @Data
 @Entity
@@ -54,6 +57,9 @@ public class Course {
     @Column(name = "status", length = 1, nullable = false)
     private RecordStatus status = RecordStatus.ACTIVE;
 
+    @Setter(AccessLevel.NONE)
+    @NotNull
+    @NotEmpty
     // mappedBy = nome da própria entidade (classe) com letra minúscula (o nome que teria a tabela caso não fosse definido com @Table)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
     private List<Lesson> lessons = new ArrayList<>();
