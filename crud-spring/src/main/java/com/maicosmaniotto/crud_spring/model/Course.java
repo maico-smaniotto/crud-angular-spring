@@ -38,6 +38,7 @@ public class Course {
     @JsonProperty("_id")
     private Long id;
 
+    @NotNull
     @NotBlank
     @Size(min = 1, max = 100)
     @Column(name = "nome", length = 100, nullable = false)

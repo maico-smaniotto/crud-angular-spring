@@ -110,9 +110,9 @@ export class CourseFormComponent implements OnInit {
     return lessons;
   }
 
-  private createLesson(lesson: Lesson = {id: '', title: '', videoCode: ''}) {
+  private createLesson(lesson: Lesson = {_id: '', title: '', videoCode: ''}) {
     return this.formBuilder.group({
-      id: [lesson.id],
+      _id: [lesson._id],
       title: [lesson.title, [
         Validators.required,
         Validators.minLength(5),
