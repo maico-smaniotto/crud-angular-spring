@@ -9,6 +9,7 @@ import com.maicosmaniotto.crud_spring.dto.LessonDTO;
 import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
 import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
 import com.maicosmaniotto.crud_spring.model.Course;
+import com.maicosmaniotto.crud_spring.model.Lesson;
 
 @Component
 public class CourseMapper {
@@ -32,25 +33,35 @@ public class CourseMapper {
         );
     }
 
-    public Course toEntity(CourseDTO dto) {
-        if (dto == null) {
+    public Course toEntity(CourseDTO courseDTO) {
+        if (courseDTO == null) {
             return null;
         }
         
-        Course entity = new Course();
+        Course course = new Course();
         
-        if (dto.id() != null) {
-            entity.setId(dto.id());
+        if (courseDTO.id() != null) {
+            course.setId(courseDTO.id());
         }        
         
-        entity.setName(dto.name());
-        entity.setCategory(CategoryConverter.stringToEntityAttribute(dto.category()));        
+        course.setName(courseDTO.name());
+        course.setCategory(CategoryConverter.stringToEntityAttribute(courseDTO.category()));        
         
-        if (dto.status() != null) {
-            entity.setStatus(RecordStatusConverter.stringToEntityAttribute(dto.status()));
+        if (courseDTO.status() != null) {
+            course.setStatus(RecordStatusConverter.stringToEntityAttribute(courseDTO.status()));
         }
+
+        List<Lesson> lessons = courseDTO.lessons().stream().map(lessonDTO -> {
+            var lesson = new Lesson();
+            lesson.setId(lessonDTO.id());
+            lesson.setTitle(lessonDTO.title());
+            lesson.setVideoCode(lessonDTO.videoCode());
+            lesson.setCourse(course);
+            return lesson;
+        }).toList();
+        course.setLessons(lessons);
         
-        return entity;
+        return course;
     }
 
 }

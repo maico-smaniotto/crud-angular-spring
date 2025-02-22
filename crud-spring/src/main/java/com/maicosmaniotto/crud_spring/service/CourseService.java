@@ -43,15 +43,19 @@ public class CourseService {
         return mapper.toDTO(repository.save(mapper.toEntity(obj)));
     }
 
-    public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO obj) {
+    public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO courseDTO) {
         return repository.findById(id)
             .map(found -> {
-                found.setName(obj.name());
-                found.setCategory(CategoryConverter.stringToEntityAttribute(obj.category()));
+                found.setName(courseDTO.name());
+                found.setCategory(CategoryConverter.stringToEntityAttribute(courseDTO.category()));
 
-                if (obj.status() != null) {
-                    found.setStatus(RecordStatusConverter.stringToEntityAttribute(obj.status()));
+                if (courseDTO.status() != null) {
+                    found.setStatus(RecordStatusConverter.stringToEntityAttribute(courseDTO.status()));
                 }
+                // Não pode sobrescrever a lista com .setLessons() pois o Hibernate precisa da referência original para funcionar
+                // found.setLessons(mapper.toEntity(courseDTO).getLessons());
+                found.getLessons().clear();
+                mapper.toEntity(courseDTO).getLessons().forEach(found.getLessons()::add);                
                 return mapper.toDTO(repository.save(found));
             }).orElseThrow(() -> new RecordNotFoundException(id));
     }
