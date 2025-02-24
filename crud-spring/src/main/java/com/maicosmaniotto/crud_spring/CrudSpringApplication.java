@@ -67,6 +67,21 @@ public class CrudSpringApplication {
 			c.getLessons().add(l);
 			repository.save(c);
 
+			for (int i  = 0; i < 100; i++) {
+				c = new Course();
+				c.setName("Course " + i);
+				
+				c.setCategory(Category.values()[i % Category.values().length]);
+
+				l = new Lesson();
+				l.setTitle("Course " + i + " | 01: Introdução");
+				l.setVideoCode("Oslquz5_UN" + i);
+				l.setCourse(c);
+
+				c.getLessons().add(l);
+				repository.save(c);
+			}
+
 			System.out.println("Database initialized");
 		};
 	}

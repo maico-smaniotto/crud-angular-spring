@@ -2,19 +2,25 @@ package com.maicosmaniotto.crud_spring.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.maicosmaniotto.crud_spring.dto.CourseDTO;
+import com.maicosmaniotto.crud_spring.dto.PageDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
 import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
+import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Validated
 @Service
@@ -27,11 +33,10 @@ public class CourseService {
         this.mapper = mapper;
     }
 
-    public List<CourseDTO> list() {
-        return repository.findAll()
-            .stream()
-            .map(mapper::toDTO)
-            .toList();
+    public PageDTO<CourseDTO> list(@PositiveOrZero int pageNumber, @Positive @Max(50) int pageSize) {
+        Page<Course> page = repository.findAll(PageRequest.of(pageNumber, pageSize));
+        List<CourseDTO> courses = page.stream().map(mapper::toDTO).toList();
+        return new PageDTO<>(courses, page.getTotalElements(), page.getTotalPages(), page.getSize(), page.getNumber());
     }
 
     public CourseDTO findById(@NotNull @Positive Long id) {
