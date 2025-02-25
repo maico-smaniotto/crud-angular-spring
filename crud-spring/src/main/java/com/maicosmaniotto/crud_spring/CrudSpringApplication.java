@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import com.maicosmaniotto.crud_spring.enums.Category;
 import com.maicosmaniotto.crud_spring.model.Course;
@@ -18,6 +19,7 @@ public class CrudSpringApplication {
 	}
 
 	@Bean
+	@Profile("dev")
 	CommandLineRunner initDatabase(CourseRepository repository) {
 		return args -> {
 			repository.deleteAll();
