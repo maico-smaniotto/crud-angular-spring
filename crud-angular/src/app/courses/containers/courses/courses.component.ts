@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { Page } from '../../model/page';
 
 @Component({
   selector: 'app-courses',
@@ -19,7 +20,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
   styleUrl: './courses.component.scss'
 })
 export class CoursesComponent implements OnInit {
-  courses$: Observable<Course[]> | null = null;
+  courses$: Observable<Page<Course>> | null = null;
 
   constructor(
     private readonly coursesService: CoursesService,
@@ -38,7 +39,7 @@ refresh() {
     catchError(err => {
       console.log(err.message);
       this.onError('Erro ao carregar cursos.');
-      return of([]);
+      return of({content: [], totalElements: 0, totalPages: 0, pageSize: 0, page: 0});
     })
   );
   // se quisesse converter para array (neste caso this.courses$ seria um array de Course)

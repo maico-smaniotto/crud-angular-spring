@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Course } from '../model/course';
 import { HttpClient } from '@angular/common/http';
 import { first, tap } from 'rxjs';
+import { Page } from '../model/page';
 // import { delay } from 'rxjs';
 
 @Injectable({
@@ -14,13 +15,22 @@ export class CoursesService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
+  // list() {
+  //   return this.httpClient.get<Course[]>(this.API)
+  //   .pipe(
+  //     //take(1),
+  //     first(), // pega só primeiro valor e cancela a inscrição
+  //     //delay(2000), // delay apenas para testar carregamento
+  //     tap((courses: Course[]) => console.log(courses))
+  //   );
+  // }
   list() {
-    return this.httpClient.get<Course[]>(this.API)
+    return this.httpClient.get<Page<Course>>(this.API)
     .pipe(
       //take(1),
       first(), // pega só primeiro valor e cancela a inscrição
       //delay(2000), // delay apenas para testar carregamento
-      tap((courses: Course[]) => console.log(courses))
+      // tap((courses: Course[]) => console.log(courses))
     );
   }
 
