@@ -24,8 +24,8 @@ export class CoursesService {
   //     tap((courses: Course[]) => console.log(courses))
   //   );
   // }
-  list() {
-    return this.httpClient.get<Page<Course>>(this.API)
+  list(page = 0, pageSize = 10) {
+    return this.httpClient.get<Page<Course>>(this.API, {params: {page, pageSize}})
     .pipe(
       //take(1),
       first(), // pega só primeiro valor e cancela a inscrição

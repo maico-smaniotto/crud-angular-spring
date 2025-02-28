@@ -6,6 +6,8 @@ import { CoursesComponent } from './containers/courses/courses.component';
 import { SharedModule } from '../shared/shared.module';
 import { CourseFormComponent } from './containers/course-form/course-form.component';
 import { CoursesListComponent } from './components/courses-list/courses-list.component';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomPaginatorIntl } from '../shared/custom-paginator-intl';
 
 @NgModule({
   declarations: [],
@@ -18,6 +20,9 @@ import { CoursesListComponent } from './components/courses-list/courses-list.com
     CourseFormComponent,
     CoursesListComponent
   ],
-  exports: [CoursesComponent, CourseFormComponent, CoursesListComponent]
+  exports: [CoursesComponent, CourseFormComponent, CoursesListComponent],
+  providers: [
+    { provide: MatPaginatorIntl, useClass: CustomPaginatorIntl }
+  ]
 })
 export class CoursesModule { }
