@@ -1,24 +1,49 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Course } from '../../model/course';
 import { CommonModule } from '@angular/common';
-import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
-import { SharedModule } from '../../../shared/shared.module';
 import { CoursesService } from '../../services/courses.service';
 import { catchError, Observable, of, tap } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Page } from '../../model/page';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-courses',
-  imports: [CommonModule, AppMaterialModule, SharedModule, CoursesListComponent],
   templateUrl: './courses.component.html',
-  styleUrl: './courses.component.scss'
+  styleUrl: './courses.component.scss',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatPaginatorModule,
+    ReactiveFormsModule,
+    CoursesListComponent
+  ]
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<Page<Course>> | null = null;

@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -11,15 +10,16 @@ import {
 
 @Component({
   selector: 'app-error-dialog',
-  imports: [
-    MatDialogTitle, 
-    MatDialogContent, 
-    MatDialogActions, 
-    MatDialogClose, 
-    MatButtonModule
-  ],
   templateUrl: './error-dialog.component.html',
-  styleUrl: './error-dialog.component.scss'
+  styleUrl: './error-dialog.component.scss',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatButtonModule
+  ]
 })
 export class ErrorDialogComponent {
   data = inject(MAT_DIALOG_DATA);

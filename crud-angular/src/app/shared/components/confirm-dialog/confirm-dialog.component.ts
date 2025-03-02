@@ -16,15 +16,16 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
+  templateUrl: './confirm-dialog.component.html',
+  styleUrl: './confirm-dialog.component.scss',
+  standalone: true,
   imports: [
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
     MatButtonModule
-  ],
-  templateUrl: './confirm-dialog.component.html',
-  styleUrl: './confirm-dialog.component.scss'
+  ]
 })
 export class ConfirmDialogComponent {
 

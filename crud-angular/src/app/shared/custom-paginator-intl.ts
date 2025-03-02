@@ -11,12 +11,10 @@ export class CustomPaginatorIntl extends MatPaginatorIntl {
 
   override getRangeLabel = (page: number, pageSize: number, length: number) => {
     if (length === 0) {
-      return 'Itens 0 de 0 :: Página 1 de 1';
+      return 'Total: 0 :: Página 1 de 1';
     }
     const amountPages = Math.ceil(length / pageSize);
-    const startIndex = page * pageSize;
-    const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-    return `${startIndex + 1} - ${endIndex} de ${length} :: Página ${page + 1} de ${amountPages}`;
+    return `Total: ${length} :: Página ${page + 1} de ${amountPages}`;
   };
 
 
