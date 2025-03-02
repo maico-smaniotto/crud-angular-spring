@@ -4,9 +4,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbarModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  standalone: true,
+  imports: [RouterOutlet, MatToolbarModule]
 })
 export class AppComponent {
   title = 'crud-angular';
