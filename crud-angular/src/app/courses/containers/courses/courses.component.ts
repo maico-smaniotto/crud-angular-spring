@@ -10,7 +10,7 @@ import { CoursesListComponent } from '../../components/courses-list/courses-list
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Page } from '../../model/page';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -21,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CustomPaginatorIntl } from '../../../shared/custom-paginator-intl';
 
 @Component({
   selector: 'app-courses',
@@ -43,6 +44,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     ReactiveFormsModule,
     CoursesListComponent
+  ],
+  providers: [
+    { provide: MatPaginatorIntl, useClass: CustomPaginatorIntl }
   ]
 })
 export class CoursesComponent implements OnInit {
