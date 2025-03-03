@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Course } from '../../model/course';
-import { CommonModule } from '@angular/common';
+
 import { CategoryPipe } from '../../../shared/pipes/category.pipe';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,7 +20,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   styleUrl: './courses-list.component.scss',
   standalone: true,
   imports: [
-    CommonModule,
     MatToolbarModule,
     MatTableModule,
     MatCardModule,
@@ -33,7 +32,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatSnackBarModule,
     CategoryPipe
-  ]
+]
 })
 export class CoursesListComponent {
 

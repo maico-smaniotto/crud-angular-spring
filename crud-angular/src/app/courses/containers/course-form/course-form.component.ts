@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NonNullableFormBuilder, FormGroup, Validators, UntypedFormArray, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { CoursesService } from '../../services/courses.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -26,7 +26,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   styleUrl: './course-form.component.scss',
   standalone: true,
   imports: [
-    CommonModule,
     MatToolbarModule,
     MatTableModule,
     MatCardModule,
@@ -40,7 +39,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSnackBarModule,
     MatPaginatorModule,
     ReactiveFormsModule
-  ]
+]
 })
 export class CourseFormComponent implements OnInit {
 
