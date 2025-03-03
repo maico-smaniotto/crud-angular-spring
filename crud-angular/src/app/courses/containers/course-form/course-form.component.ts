@@ -45,6 +45,8 @@ export class CourseFormComponent implements OnInit {
 
   form!: FormGroup;
 
+  operation: string = 'create';
+
   private readonly NAME_MAX_LENGTH = 100;
 
   constructor(
@@ -114,6 +116,12 @@ export class CourseFormComponent implements OnInit {
 
   ngOnInit() {
     const course: Course = this.route.snapshot.data['course'];
+
+    if (course._id) {
+      this.operation = 'edit';
+    } else {
+      this.operation = 'create';
+    }
 
     this.form = this.formBuilder.group({
       _id: [course._id],

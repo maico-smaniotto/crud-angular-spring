@@ -1,8 +1,10 @@
-<!-- <mat-toolbar color="primary">Novo Curso</mat-toolbar> -->
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Novo Curso</mat-card-title>
-    <!-- <mat-card-subtitle>Criando novo curso</mat-card-subtitle> -->
+    @if (operation == "edit") {
+      <mat-card-title>Editar Curso</mat-card-title>
+    } @else {
+      <mat-card-title>Novo Curso</mat-card-title>
+    }
   </mat-card-header>
 
   <mat-card-content>
@@ -18,7 +20,6 @@
 
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Categoria</mat-label>
-        <!-- <input matInput placeholder="Categoria" formControlName="category"> -->
         <mat-select formControlName="category" required>
           <mat-option value=""></mat-option>
           <mat-option value="Front-end">Front-end</mat-option>
