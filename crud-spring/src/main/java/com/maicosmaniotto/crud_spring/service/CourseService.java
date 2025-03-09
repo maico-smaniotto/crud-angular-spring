@@ -12,6 +12,7 @@ import com.maicosmaniotto.crud_spring.dto.PageDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
 import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
+import com.maicosmaniotto.crud_spring.exception.CourseHasNoLessonsException;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
 import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
@@ -33,7 +34,10 @@ public class CourseService {
         this.mapper = mapper;
     }
 
-    public PageDTO<CourseDTO> list(@PositiveOrZero int pageNumber, @Positive @Max(50) int pageSize) {
+    public PageDTO<CourseDTO> list(
+        @PositiveOrZero    int pageNumber, 
+        @Positive @Max(50) int pageSize
+    ) {
         Page<Course> page = repository.findAll(PageRequest.of(pageNumber, pageSize));
         List<CourseDTO> courses = page.stream().map(mapper::toDTO).toList();
         return new PageDTO<>(courses, page.getTotalElements(), page.getTotalPages(), page.getSize(), page.getNumber());
@@ -44,8 +48,11 @@ public class CourseService {
             .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public CourseDTO create(@Valid @NotNull CourseDTO obj) {
-        return mapper.toDTO(repository.save(mapper.toEntity(obj)));
+    public CourseDTO create(@Valid @NotNull CourseDTO courseDTO) {
+        if (courseDTO.lessons().isEmpty()) {
+            throw new CourseHasNoLessonsException(courseDTO.name());
+        }        
+        return mapper.toDTO(repository.save(mapper.toEntity(courseDTO)));
     }
 
     public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO courseDTO) {
