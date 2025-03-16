@@ -13,15 +13,15 @@ services:
 volumes:
   postgres_data:
 
+## Iniciar docker desktop e subir contêiner
 # systemctl --user start docker-desktop
-# docker compose build
 # docker compose up -d
 
-# forçar build sem cache
+## Fazer build
+# docker compose build
 # docker compose build --no-cache
 
-# se a docker engine não iniciar então executar os seguintes comandos e depois novamente os passos acima:
-
+## Se a docker engine não iniciar então executar os seguintes comandos e depois novamente os passos anteriores para iniciar:
 # systemctl --user stop docker-desktop
 # rm -rf ~/.docker/desktop
 
