@@ -1,6 +1,7 @@
 package com.maicosmaniotto.crud_spring.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 
@@ -22,9 +23,13 @@ import com.maicosmaniotto.crud_spring.dto.PageDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.enums.Category;
 import com.maicosmaniotto.crud_spring.exception.CourseHasNoLessonsException;
+import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
 import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.model.Lesson;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
+
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 
 @ExtendWith(MockitoExtension.class)
 class CourseServiceTest {
@@ -49,8 +54,32 @@ class CourseServiceTest {
     }
 
     @Test
+    @DisplayName("Should return a course by id")
     void testFindById() {
+        Course c = new Course();
+        c.setName("Angular");
+        c.setCategory(Category.FRONTENT);
 
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(java.util.Optional.of(c));
+        CourseDTO dto = service.findById(1L);        
+        assertEquals(mapper.toDTO(c), dto);
+        Mockito.verify(repository).findById(Mockito.anyLong());
+    }
+
+    @Test
+    @DisplayName("Should throw NotFoundException when course is not found")
+    void testFindByIdNotFound() {
+        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(java.util.Optional.empty());
+        Assertions.assertThrows(RecordNotFoundException.class, () -> service.findById(1L));
+        Mockito.verify(repository).findById(Mockito.anyLong());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when course id is invalid")
+    void testFindByIdInvalidId() {
+        assertThrows(ConstraintViolationException.class, () -> service.findById(null));
+        assertThrows(ConstraintViolationException.class, () -> service.findById(0L));
+        assertThrows(ConstraintViolationException.class, () -> service.findById(-1L));
     }
 
     @Test
