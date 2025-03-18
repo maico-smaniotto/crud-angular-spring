@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,22 +15,22 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import com.maicosmaniotto.crud_spring.config.ValidationAdvice;
 import com.maicosmaniotto.crud_spring.dto.CourseDTO;
 import com.maicosmaniotto.crud_spring.dto.PageDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.enums.Category;
-import com.maicosmaniotto.crud_spring.exception.CourseHasNoLessonsException;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
 import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.model.Lesson;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
 
 @ExtendWith(MockitoExtension.class)
 class CourseServiceTest {
@@ -42,6 +43,13 @@ class CourseServiceTest {
 
     @Spy
     private CourseMapper mapper = new CourseMapper();
+
+    @BeforeEach
+    void setUp() throws Exception {
+        ProxyFactory factory = new ProxyFactory(service);
+        factory.addAdvice(new ValidationAdvice());
+        service = (CourseService) factory.getProxy();
+    }
 
     @Test
     void testCreate() {
@@ -141,6 +149,6 @@ class CourseServiceTest {
         
         CourseDTO courseDTO = mapper.toDTO(c);
 
-        Assertions.assertThrows(CourseHasNoLessonsException.class, () -> service.create(courseDTO));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> service.create(courseDTO));
     }
 }

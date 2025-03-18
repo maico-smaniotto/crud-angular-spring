@@ -12,7 +12,6 @@ import com.maicosmaniotto.crud_spring.dto.PageDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.enums.converters.CategoryConverter;
 import com.maicosmaniotto.crud_spring.enums.converters.RecordStatusConverter;
-import com.maicosmaniotto.crud_spring.exception.CourseHasNoLessonsException;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
 import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
@@ -49,9 +48,6 @@ public class CourseService {
     }
 
     public CourseDTO create(@Valid @NotNull CourseDTO courseDTO) {
-        if (courseDTO.lessons().isEmpty()) {
-            throw new CourseHasNoLessonsException(courseDTO.name());
-        }        
         return mapper.toDTO(repository.save(mapper.toEntity(courseDTO)));
     }
 
