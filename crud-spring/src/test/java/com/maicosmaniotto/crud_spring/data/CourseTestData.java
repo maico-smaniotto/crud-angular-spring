@@ -1,10 +1,10 @@
-package com.maicosmaniotto.crud_spring.course;
+package com.maicosmaniotto.crud_spring.data;
 
 import com.maicosmaniotto.crud_spring.enums.Category;
 import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.model.Lesson;
 
-public class TestData {
+public class CourseTestData {
     
     public static Course createValidCourseWithOneLesson() {
         Course course = new Course();

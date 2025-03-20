@@ -1,4 +1,4 @@
-package com.maicosmaniotto.crud_spring.course;
+package com.maicosmaniotto.crud_spring.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,13 +25,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import com.maicosmaniotto.crud_spring.config.ValidationAdvice;
+import com.maicosmaniotto.crud_spring.data.CourseTestData;
 import com.maicosmaniotto.crud_spring.dto.CourseDTO;
 import com.maicosmaniotto.crud_spring.dto.PageDTO;
 import com.maicosmaniotto.crud_spring.dto.mapper.CourseMapper;
 import com.maicosmaniotto.crud_spring.exception.RecordNotFoundException;
 import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.repository.CourseRepository;
-import com.maicosmaniotto.crud_spring.service.CourseService;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -57,7 +57,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should create a course successfully when valid data is provided")
     void testCreate() {
-        Course c = TestData.createValidCourseWithOneLesson();
+        Course c = CourseTestData.createValidCourseWithOneLesson();
 
         CourseDTO dto = mapper.toDTO(c);
         when(repository.save(any(Course.class))).thenReturn(c);
@@ -70,14 +70,14 @@ class CourseServiceTest {
     @DisplayName("Should not create a course when invalid data is provided")
     void testCreateInvalid() {
         // Course with no lessons
-        Course c = TestData.createValidCourseWithOneLesson();
+        Course c = CourseTestData.createValidCourseWithOneLesson();
         c.getLessons().clear();
         CourseDTO dto = mapper.toDTO(c);
         assertThrows(ConstraintViolationException.class, () -> service.create(dto));
         verifyNoInteractions(repository);
 
         // Course with empty name
-        Course c2 = TestData.createValidCourseWithOneLesson();
+        Course c2 = CourseTestData.createValidCourseWithOneLesson();
         c2.setName("");
         CourseDTO dto2 = mapper.toDTO(c2);
         assertThrows(ConstraintViolationException.class, () -> service.create(dto2));
@@ -87,8 +87,8 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should update a course successfully when valid data is provided")
     void testUpdate() {
-        Course oldCourse = TestData.createValidCourseWithOneLesson();
-        Course newCourse = TestData.createValidCourseWithOneLesson();
+        Course oldCourse = CourseTestData.createValidCourseWithOneLesson();
+        Course newCourse = CourseTestData.createValidCourseWithOneLesson();
 
         when(repository.findById(anyLong())).thenReturn(Optional.of(oldCourse));
         when(repository.save(any(Course.class))).thenReturn(newCourse);
@@ -104,7 +104,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should throw RecordNotFoundException when trying to update a non-existent course")
     void testUpdateNotFound() {
-        Course validCourse = TestData.createValidCourseWithOneLesson();
+        Course validCourse = CourseTestData.createValidCourseWithOneLesson();
         CourseDTO validCourseDTO = mapper.toDTO(validCourse);
         
         when(repository.findById(123L)).thenReturn(Optional.empty());
@@ -115,10 +115,10 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should throw ConstraintViolationException when updating course with invalid data")
     void testUpdateInvalid() {
-        Course validCourse = TestData.createValidCourseWithOneLesson();
-        Course invalidCourse1 = TestData.createValidCourseWithOneLesson();
+        Course validCourse = CourseTestData.createValidCourseWithOneLesson();
+        Course invalidCourse1 = CourseTestData.createValidCourseWithOneLesson();
         invalidCourse1.setName("");
-        Course invalidCourse2 = TestData.createValidCourseWithOneLesson();
+        Course invalidCourse2 = CourseTestData.createValidCourseWithOneLesson();
         invalidCourse2.getLessons().clear();
 
         CourseDTO validCourseDTO = mapper.toDTO(validCourse);
@@ -137,7 +137,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should delete a course successfully")
     void testDelete() {
-        Course c = TestData.createValidCourseWithOneLesson();
+        Course c = CourseTestData.createValidCourseWithOneLesson();
         when(repository.findById(anyLong())).thenReturn(Optional.of(c));
         service.delete(1L);
         verify(repository).delete(any(Course.class));
@@ -162,7 +162,7 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should return a course by id")
     void testFindById() {
-        Course c = TestData.createValidCourseWithOneLesson();
+        Course c = CourseTestData.createValidCourseWithOneLesson();
 
         when(repository.findById(anyLong())).thenReturn(Optional.of(c));
         CourseDTO dto = service.findById(1L);        
@@ -189,8 +189,8 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should return a course page with only one course and two lessons")
     void testList() {
-        Course c = TestData.createValidCourseWithOneLesson();
-        TestData.insertLesson(c, "Lesson 2", "Oslquz5_UNY");
+        Course c = CourseTestData.createValidCourseWithOneLesson();
+        CourseTestData.insertLesson(c, "Lesson 2", "Oslquz5_UNY");
         
         int pageNumber = 0;
         int pageSize = 50;
