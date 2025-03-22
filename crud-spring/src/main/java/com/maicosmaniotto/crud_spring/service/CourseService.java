@@ -25,34 +25,34 @@ import jakarta.validation.constraints.PositiveOrZero;
 @Validated
 @Service
 public class CourseService {
-    private final CourseRepository repository;
-    private final CourseMapper mapper;
+    private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
-    public CourseService(CourseRepository repository, CourseMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
+    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper) {
+        this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
     }
 
     public PageDTO<CourseDTO> list(
         @PositiveOrZero    int pageNumber, 
         @Positive @Max(50) int pageSize
     ) {
-        Page<Course> page = repository.findAll(PageRequest.of(pageNumber, pageSize));
-        List<CourseDTO> courses = page.stream().map(mapper::toDTO).toList();
+        Page<Course> page = courseRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        List<CourseDTO> courses = page.stream().map(courseMapper::toDTO).toList();
         return new PageDTO<>(courses, page.getTotalElements(), page.getTotalPages(), page.getSize(), page.getNumber());
     }
 
     public CourseDTO findById(@NotNull @Positive Long id) {
-        return repository.findById(id).map(mapper::toDTO)
+        return courseRepository.findById(id).map(courseMapper::toDTO)
             .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
     public CourseDTO create(@Valid @NotNull CourseDTO courseDTO) {
-        return mapper.toDTO(repository.save(mapper.toEntity(courseDTO)));
+        return courseMapper.toDTO(courseRepository.save(courseMapper.toEntity(courseDTO)));
     }
 
     public CourseDTO update(@NotNull @Positive Long id, @Valid @NotNull CourseDTO courseDTO) {
-        return repository.findById(id)
+        return courseRepository.findById(id)
             .map(found -> {
                 found.setName(courseDTO.name());
                 found.setCategory(CategoryConverter.stringToEntityAttribute(courseDTO.category()));
@@ -63,14 +63,14 @@ public class CourseService {
                 // Não pode sobrescrever a lista com .setLessons() pois o Hibernate precisa da referência original para funcionar
                 // found.setLessons(mapper.toEntity(courseDTO).getLessons());
                 found.getLessons().clear();
-                mapper.toEntity(courseDTO).getLessons().forEach(found.getLessons()::add);                
-                return mapper.toDTO(repository.save(found));
+                courseMapper.toEntity(courseDTO).getLessons().forEach(found.getLessons()::add);                
+                return courseMapper.toDTO(courseRepository.save(found));
             }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
     public void delete(@NotNull @Positive Long id) {
-        repository.delete(
-            repository.findById(id)
+        courseRepository.delete(
+            courseRepository.findById(id)
             .orElseThrow(() -> new RecordNotFoundException(id))
         );
     }

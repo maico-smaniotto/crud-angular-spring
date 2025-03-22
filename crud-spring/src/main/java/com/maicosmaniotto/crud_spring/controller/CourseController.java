@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/courses")
 public class CourseController {
     
-    private final CourseService service;
+    private final CourseService courseService;
 
-	public CourseController(CourseService service) {
-        this.service = service;
+	public CourseController(CourseService courseService) {
+        this.courseService = courseService;
 	}
 
 	@GetMapping
@@ -40,28 +40,28 @@ public class CourseController {
         @RequestParam(defaultValue = "0")  @PositiveOrZero    int page, 
         @RequestParam(defaultValue = "10") @Positive @Max(50) int pageSize
     ) {
-        return service.list(page, pageSize);
+        return courseService.list(page, pageSize);
     }
 
     @GetMapping("/{id}")
     public CourseDTO findById(@PathVariable @NotNull @Positive Long id) {
-        return service.findById(id);
+        return courseService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CourseDTO create(@RequestBody @Valid @NotNull CourseDTO obj) {
-        return service.create(obj);
+    public CourseDTO create(@RequestBody @Valid @NotNull CourseDTO courseDTO) {
+        return courseService.create(courseDTO);
     }
 
     @PutMapping("/{id}")
-    public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO obj) {
-        return service.update(id, obj);
+    public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO courseDTO) {
+        return courseService.update(id, courseDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @NotNull @Positive Long id) {
-        service.delete(id);
+        courseService.delete(id);
     }
 }
