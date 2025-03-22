@@ -14,13 +14,14 @@ import static org.hamcrest.Matchers.is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -33,7 +34,7 @@ import com.maicosmaniotto.crud_spring.model.Course;
 import com.maicosmaniotto.crud_spring.service.CourseService;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = {CourseController.class})
+@ExtendWith(MockitoExtension.class)
 class CourseControllerTest {
 
     private static final String API = "/api/courses";
@@ -57,7 +58,7 @@ class CourseControllerTest {
 
     @Test
     @DisplayName("Should return a list of courses in JSON format")
-    private void testList() throws Exception {
+    void testList() throws Exception {
         Course c = CourseTestData.createValidCourseWithOneLesson();
         CourseDTO dto = mapper.toDTO(c);
         List<CourseDTO> courses = List.of(dto);
@@ -71,11 +72,11 @@ class CourseControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.content", hasSize(courses.size())))
             .andExpect(jsonPath("totalElements", is(1)))
-            .andExpect(jsonPath("$.content[0].id", is(dto.id()), Long.class))
+            .andExpect(jsonPath("$.content[0]._id", is(dto.id()), Long.class))
             .andExpect(jsonPath("$.content[0].name", is(dto.name())))
             .andExpect(jsonPath("$.content[0].category", is(dto.category())))
             .andExpect(jsonPath("$.content[0].lessons", hasSize(dto.lessons().size())))
-            .andExpect(jsonPath("$.content[0].lessons[0].id", is(dto.lessons().get(0).id()), Long.class));
+            .andExpect(jsonPath("$.content[0].lessons[0]._id", is(dto.lessons().get(0).id()), Long.class));
 
     }
 }

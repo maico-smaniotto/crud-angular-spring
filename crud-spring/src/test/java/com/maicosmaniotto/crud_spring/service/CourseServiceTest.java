@@ -23,6 +23,7 @@ import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.maicosmaniotto.crud_spring.config.ValidationAdvice;
 import com.maicosmaniotto.crud_spring.data.CourseTestData;
@@ -35,6 +36,7 @@ import com.maicosmaniotto.crud_spring.repository.CourseRepository;
 
 import jakarta.validation.ConstraintViolationException;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class CourseServiceTest {
 
