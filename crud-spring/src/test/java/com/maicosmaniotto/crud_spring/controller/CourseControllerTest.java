@@ -47,7 +47,7 @@ class CourseControllerTest {
     private CourseService courseService;
 
     @Spy
-    private CourseMapper mapper = new CourseMapper();
+    private CourseMapper courseMapper = new CourseMapper();
 
     @BeforeEach
     void setUp() {
@@ -59,24 +59,48 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should return a list of courses in JSON format")
     void testList() throws Exception {
-        Course c = CourseTestData.createValidCourseWithOneLesson();
-        CourseDTO dto = mapper.toDTO(c);
-        List<CourseDTO> courses = List.of(dto);
+        Course course = CourseTestData.createValidCourseWithOneLesson();
+        CourseDTO courseDTO = courseMapper.toDTO(course);
+        List<CourseDTO> courses = List.of(courseDTO);
         PageDTO<CourseDTO> page = new PageDTO<>(courses, 1, 1, 1, 0);
 
         when(courseService.list(anyInt(), anyInt())).thenReturn(page);
+
+        var requestBuilder = MockMvcRequestBuilders.get(API);
         MockMvcBuilders.standaloneSetup(courseController)
             .build()
-            .perform(MockMvcRequestBuilders.get(API))
+            .perform(requestBuilder)
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.content", hasSize(courses.size())))
             .andExpect(jsonPath("totalElements", is(1)))
-            .andExpect(jsonPath("$.content[0]._id", is(dto.id()), Long.class))
-            .andExpect(jsonPath("$.content[0].name", is(dto.name())))
-            .andExpect(jsonPath("$.content[0].category", is(dto.category())))
-            .andExpect(jsonPath("$.content[0].lessons", hasSize(dto.lessons().size())))
-            .andExpect(jsonPath("$.content[0].lessons[0]._id", is(dto.lessons().get(0).id()), Long.class));
+            .andExpect(jsonPath("$.content[0]._id", is(courseDTO.id()), Long.class))
+            .andExpect(jsonPath("$.content[0].name", is(courseDTO.name())))
+            .andExpect(jsonPath("$.content[0].category", is(courseDTO.category())))
+            .andExpect(jsonPath("$.content[0].lessons", hasSize(courseDTO.lessons().size())))
+            .andExpect(jsonPath("$.content[0].lessons[0]._id", is(courseDTO.lessons().get(0).id()), Long.class));
 
+    }
+
+    @Test
+    @DisplayName("Should return a course by id in JSON format")
+    void testFindById() throws Exception {
+        Course course = CourseTestData.createValidCourseWithOneLesson();
+        course.setId(1L);
+        CourseDTO courseDTO = courseMapper.toDTO(course);
+
+        when(courseService.findById(courseDTO.id())).thenReturn(courseDTO);
+
+        var requestBuilder = MockMvcRequestBuilders.get(API_ID, course.getId());
+        MockMvcBuilders.standaloneSetup(courseController)
+            .build()
+            .perform(requestBuilder)
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("_id", is(courseDTO.id()), Long.class))
+            .andExpect(jsonPath("name", is(courseDTO.name())))
+            .andExpect(jsonPath("category", is(courseDTO.category())))
+            .andExpect(jsonPath("lessons", hasSize(courseDTO.lessons().size())))
+            .andExpect(jsonPath("lessons[0]._id", is(courseDTO.lessons().get(0).id()), Long.class));
     }
 }
