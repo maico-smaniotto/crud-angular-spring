@@ -3,6 +3,8 @@ package com.maicosmaniotto.crud_spring.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -283,4 +285,40 @@ class CourseControllerTest {
         }
     }
 
+    @Test
+    @DisplayName("Should delete a course")
+    void testDelete() throws Exception {
+        doNothing().when(courseService).delete(anyLong());
+
+        var requestBuilder = MockMvcRequestBuilders.delete(API_ID, 1L);
+        MockMvcBuilders.standaloneSetup(courseController)
+            .build()
+            .perform(requestBuilder)
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Should throw RecordNotFoundException when trying to delete a course that does not exist")
+    void testDeleteNotFound() {
+        doThrow(RecordNotFoundException.class).when(courseService).delete(anyLong());
+        var requestBuilder = MockMvcRequestBuilders.delete(API_ID, 1L);
+        assertThrows(ServletException.class, () -> {
+            MockMvcBuilders.standaloneSetup(courseController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isNotFound());
+        });
+    }
+
+    @Test
+    @DisplayName("Should return bad request when trying to delete a course with invalid data")
+    void testDeleteInvalid() {
+        var requestBuilder = MockMvcRequestBuilders.delete(API_ID, 0L);
+        assertThrows(ServletException.class, () -> {
+            MockMvcBuilders.standaloneSetup(courseController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isBadRequest());
+        });
+    }
 }
